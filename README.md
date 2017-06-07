@@ -1,3 +1,3 @@
 # FXCM-Trading
 
-Risk management and stress testing for trading.
+Python implementation for risk management and stress testing.
