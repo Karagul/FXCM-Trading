@@ -9,10 +9,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import datetime
 import pandas_datareader as pdr
+import df2gspread
 import quandl
 import seaborn as sns
 
 from pandas_datareader import data, wb
+from df2gspread import gspread2df as g2d
 
 #%matplotlib inline
 
@@ -32,10 +34,10 @@ def stress_test(event = 'none',  alpha = 0.05, compare = 'SPY', *args, **kwargs)
 
     # Events
     if event == 'us':
-        log_rt = log_rt.ix['2011-07-01':'2012-03-30']
-        pr = pr.ix['2011-07-01':'2012-03-30']
+        log_rt = log_rt.ix['2011-07-01':'2011-12-30']
+        pr = pr.ix['2011-07-01':'2011-12-30']
         start = datetime.date(2011,7,1)
-        end = datetime.date(2012,3,30)
+        end = datetime.date(2011,12,30)
         event_name = 'US DOWNGRADE'
     elif event == 'ch':
         log_rt = log_rt.ix['2015-08-01':'2016-04-29'] 
@@ -65,8 +67,8 @@ def stress_test(event = 'none',  alpha = 0.05, compare = 'SPY', *args, **kwargs)
         print('No event selected\n Options: US Downgrade (us), China Devaluation (ch), Brexit (br), all (all)', '\n')
         return
         
-#    weights = pd.read_excel("/home/rem/Dropbox/Ubuntu Docs/FXCM Trading/Trading FXCM - 2017.xlsm", sheetname='Weights', index_col=0)
-    weights = pd.read_excel("/home/rem/Documents/FXCM Trading (Dropbox)/Weights.xlsx", sheetname='Weights', index_col=0)
+    weights = g2d.download(gfile="1bmy2DLu5NV5IP-mo9rGWOyHOx7bEfoglVZmzzuHi5zc", wks_name="Weights", col_names=True, row_names=True, credentials=None, start_cell='A1')
+    weights = weights.apply(pd.to_numeric, errors='ignore')
     
 
     R = log_rt
